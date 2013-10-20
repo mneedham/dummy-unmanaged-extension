@@ -35,7 +35,7 @@ public class DummyResource
     @Path("/all-nodes")
     public Response uploadNodesFile(  ) throws IOException
     {
-        ExecutionResult result = executionEngine.execute("START n = node(*) RETURN n.name");
+        ExecutionResult result = executionEngine.execute("START n = node(*) RETURN n.name ORDER BY n.name");
 
         ObjectNode root = JsonNodeFactory.instance.objectNode();
         for (String column : result.columns()) {

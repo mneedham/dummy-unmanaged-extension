@@ -23,7 +23,6 @@ import java.net.ServerSocket;
 import static junit.framework.Assert.assertEquals;
 
 public class DummyResourceTest {
-
     private GraphDatabaseAPI db;
     private CommunityNeoServer server;
 
@@ -36,11 +35,10 @@ public class DummyResourceTest {
                 .onPort(serverSocket.getLocalPort())
                 .withThirdPartyJaxRsPackage("org.neo4j.unmanaged", "/unmanaged")
                 .build();
-        
+
         server.start();
         db = server.getDatabase().getGraph();
     }
-
 
     @After
     public void after() {
@@ -50,8 +48,8 @@ public class DummyResourceTest {
     @Test
     public void shouldReturnAllTheNodes() {
         Transaction tx = db.beginTx();
-        Node node = db.createNode();
-        node.setProperty("name", "Mark");
+        db.createNode().setProperty("name", "Mark");
+        db.createNode().setProperty("name", "Dave");
         tx.success(); tx.close();
 
         DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
@@ -63,7 +61,7 @@ public class DummyResourceTest {
 
         JsonNode response = clientResponse.getEntity(JsonNode.class);
 
-
-        assertEquals("Mark", response.get("n.name").get(0).asText());
+        assertEquals("Dave", response.get("n.name").get(0).asText());
+        assertEquals("Mark", response.get("n.name").get(1).asText());
     }
 }
