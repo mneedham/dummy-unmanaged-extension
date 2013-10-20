@@ -43,12 +43,17 @@ public class DummyResource
 
             ArrayNode resultRows = JsonNodeFactory.instance.arrayNode();
             while(rows.hasNext()) {
-                resultRows.add(rows.next().toString());
+                Object row = rows.next();
+
+                if(row != null)
+                    resultRows.add(row.toString());
             }
 
             root.put(column, resultRows);
         }
 
-        return Response.status( 200 ).entity( OBJECT_MAPPER.writeValueAsString(root) ).type( MediaType.APPLICATION_JSON ).build();
+        return Response.status( 200 )
+                .entity(OBJECT_MAPPER.writeValueAsString(root))
+                .type(MediaType.APPLICATION_JSON).build();
     }
 }
