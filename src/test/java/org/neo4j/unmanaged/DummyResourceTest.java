@@ -1,6 +1,5 @@
 package org.neo4j.unmanaged;
 
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -50,18 +49,21 @@ public class DummyResourceTest {
         Transaction tx = db.beginTx();
         db.createNode().setProperty("name", "Mark");
         db.createNode().setProperty("name", "Dave");
-        tx.success(); tx.close();
+        tx.success();
+        tx.close();
 
-        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
-        defaultClientConfig.getClasses().add( JacksonJsonProvider.class );
-        Client client = Client.create(defaultClientConfig);
-
-        ClientResponse clientResponse = client.resource(server.baseUri().toString() + "unmanaged/dummy/all-nodes")
-                .get(ClientResponse.class);
-
-        JsonNode response = clientResponse.getEntity(JsonNode.class);
+        JsonNode response = jerseyClient()
+                .resource(server.baseUri().toString() + "unmanaged/dummy/all-nodes")
+                .get(ClientResponse.class)
+                .getEntity(JsonNode.class);
 
         assertEquals("Dave", response.get("n.name").get(0).asText());
         assertEquals("Mark", response.get("n.name").get(1).asText());
+    }
+
+    private Client jerseyClient() {
+        DefaultClientConfig defaultClientConfig = new DefaultClientConfig();
+        defaultClientConfig.getClasses().add(JacksonJsonProvider.class);
+        return Client.create(defaultClientConfig);
     }
 }

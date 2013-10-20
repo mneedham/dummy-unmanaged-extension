@@ -20,13 +20,11 @@ import java.io.IOException;
 @Path("/dummy")
 public class DummyResource
 {
-    private final GraphDatabaseService database;
     private final ExecutionEngine executionEngine;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public DummyResource( @Context GraphDatabaseService database )
     {
-        this.database = database;
         this.executionEngine = new ExecutionEngine(database);
     }
 
