@@ -3,15 +3,8 @@ package org.neo4j.unmanaged;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
-import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Result;
-import org.neo4j.graphdb.Transaction;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -46,19 +39,7 @@ public class DummyResource {
                 jg.writeFieldName("people");
                 jg.writeStartArray();
 
-                try (Transaction ignored = db.beginTx();
-                     Result result = db.execute("MATCH (n:Person) RETURN n.name AS name")) {
-                    while (result.hasNext()) {
-                        Map<String, Object> row = result.next();
-
-                        jg.writeStartObject();
-                        for (Map.Entry<String, Object> entry : row.entrySet()) {
-                            jg.writeFieldName(entry.getKey());
-                            jg.writeString(entry.getValue().toString());
-                        }
-                        jg.writeEndObject();
-                    }
-                }
+                writeQueryResultTo("MATCH (n:Person) RETURN n.name AS name", jg);
 
                 jg.writeEndArray();
                 jg.writeEndObject();
@@ -69,5 +50,20 @@ public class DummyResource {
 
         return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).build();
 
+    }
+
+    private void writeQueryResultTo(String query, JsonGenerator jg) throws IOException {
+        try (Result result = db.execute(query)) {
+            while (result.hasNext()) {
+                Map<String, Object> row = result.next();
+
+                jg.writeStartObject();
+                for (Map.Entry<String, Object> entry : row.entrySet()) {
+                    jg.writeFieldName(entry.getKey());
+                    jg.writeString(entry.getValue().toString());
+                }
+                jg.writeEndObject();
+            }
+        }
     }
 }
