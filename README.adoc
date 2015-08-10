@@ -1,0 +1,8 @@
+= An example of a Neo4j unmanaged extension
+
+This project is intended as a simple template for creating a Neo4j unmanaged extension.
+
+
+````
+curl -H "Accept-Encoding:gzip,deflate" -v http://localhost:7474/unmanaged/dummy/all-nodes | gunzip
+````
