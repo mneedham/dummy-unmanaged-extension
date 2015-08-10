@@ -38,21 +38,21 @@ Now we can make some calls to our unmanaged extension:
 
 ```
 $ curl http://localhost:7474/unmanaged/dummy/all-nodes
-{"n.name":["Mark","Nicole"]}
+{"people":[{"name":"Mark"},{"name":"Nicole"}]}
 ```
 
 The extension can also return us a gzipped response if we ask for it:
 
 ```
 $ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes
-�V���K�MU��V�M,�V�Q��L��IU����-�
+�V*H�/�IU���V�K�2�|���ju�|���|����Zw �Z.
 ```
 
 I'm not so good at reading gzipped but if we want to see that in clear text we can pipe the output through gunzip:
 
 ```
 $ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes | gunzip
-{"n.name":["Mark","Nicole"]}
+{"people":[{"name":"Mark"},{"name":"Nicole"}]}
 ```
 
 Much better.
