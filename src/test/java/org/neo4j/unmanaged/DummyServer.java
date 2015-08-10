@@ -1,37 +1,31 @@
 package org.neo4j.unmanaged;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.kernel.GraphDatabaseAPI;
-import org.neo4j.server.CommunityNeoServer;
-import org.neo4j.server.helpers.CommunityServerBuilder;
+import org.neo4j.harness.ServerControls;
+import org.neo4j.harness.TestServerBuilders;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
 
-import static junit.framework.Assert.assertEquals;
+//import org.neo4j.server.helpers.CommunityServerBuilder;
 
 public class DummyServer {
     public static void main(String[] args) throws IOException {
-//        ServerSocket serverSocket = new ServerSocket(0);
 
-        GraphDatabaseAPI db;
-        CommunityNeoServer server;
+        ServerControls server = TestServerBuilders
+                .newInProcessBuilder(new File("/Users/markneedham/repos/dummy-unmanaged-extension/neo4j-community-2.2.3/data/graph.db"))
+                .withExtension("/unmanaged", DummyResource.class)
+                .newServer();
 
-        server = CommunityServerBuilder
-                .server()
-                .onPort(7474)
-                .withThirdPartyJaxRsPackage("org.neo4j.unmanaged", "/unmanaged")
-                .build();
 
-        server.start();
+//        CommunityNeoServer server = CommunityServerBuilder
+//                .server()
+//                .onPort(7474)
+//                .persistent()
+//                .usingDatabaseDir("/Users/markneedham/repos/dummy-unmanaged-extension/neo4j-community-2.2.3/data/graph.db")
+//                .withThirdPartyJaxRsPackage("org.neo4j.unmanaged", "/unmanaged")
+//                .build();
+//
+//        server.start();
     }
 
 

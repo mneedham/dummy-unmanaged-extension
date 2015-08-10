@@ -22,7 +22,6 @@ public class GZipInitialiser implements SPIPluginLifecycle {
 
         webServer.addFilter(filter, "/*");
         return Collections.emptyList();
-
     }
 
     private WebServer getWebServer(final NeoServer neoServer) {

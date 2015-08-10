@@ -18,39 +18,36 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 @Path("/dummy")
-public class DummyResource
-{
+public class DummyResource {
     private final ExecutionEngine executionEngine;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public DummyResource( @Context GraphDatabaseService database )
-    {
+    public DummyResource(@Context GraphDatabaseService database) {
         this.executionEngine = new ExecutionEngine(database);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/all-nodes")
-    public Response uploadNodesFile(  ) throws IOException
-    {
-        ExecutionResult result = executionEngine.execute("START n = node(*) RETURN n.name ORDER BY n.name");
+    public Response uploadNodesFile() throws IOException {
+        ExecutionResult result = executionEngine.execute("MATCH (n:Person) RETURN n.name");
 
         ObjectNode root = JsonNodeFactory.instance.objectNode();
         for (String column : result.columns()) {
             ResourceIterator<Object> rows = result.columnAs(column);
 
             ArrayNode resultRows = JsonNodeFactory.instance.arrayNode();
-            while(rows.hasNext()) {
+            while (rows.hasNext()) {
                 Object row = rows.next();
 
-                if(row != null)
+                if (row != null)
                     resultRows.add(row.toString());
             }
 
             root.put(column, resultRows);
         }
 
-        return Response.status( 200 )
+        return Response.status(200)
                 .entity(OBJECT_MAPPER.writeValueAsString(root))
                 .type(MediaType.APPLICATION_JSON).build();
     }
