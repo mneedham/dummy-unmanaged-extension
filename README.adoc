@@ -1,14 +1,15 @@
 = An example of a Neo4j unmanaged extension
 
 This project is intended as a simple template for creating a Neo4j unmanaged extension.
+The unmanaged extension returns an array containing the `name` property of all nodes in the database.
 
 I downloaded Neo4j to this directory so the following instructions make that assumption about its location.
 If you've got Neo4j running elsewhere then change the instructions appropriately.
 
-First let's package the unmanaged extension:
+First let's build a JAR containing our unmanaged extension:
 
 ```
-mvn package
+mvn assembly:single
 ```
 
 Now let's copy it into the Neo4j plugins folder:
@@ -23,14 +24,31 @@ Next we add the following line to conf/neo4j-server.properties
 org.neo4j.server.thirdparty_jaxrs_classes=org.neo4j.unmanaged=/unmanaged
 ```
 
+Now let's go to the Neo4j browser at http://localhost:7474 and put some data in:
 
+```
+create (p:Person {name: "Nicole"})
+```
+
+```
+create (p:Person {name: "Mark"})
+```
+
+Now we can make some calls to our unmanaged extension:
+
+```
+$ curl http://localhost:7474/unmanaged/dummy/all-nodes
+{"n.name":["Mark","Nicole"]}
+```
+
+The extension can also return us a gzipped response if we ask for it:
 
 ```
 $ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes
 �V���K�MU��V�M,�V�Q��L��IU����-�
 ```
 
-If we want to see that in clear text we can pipe the output through gunzip:
+I'm not so good at reading gzipped but if we want to see that in clear text we can pipe the output through gunzip:
 
 ```
 $ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes | gunzip
