@@ -2,7 +2,39 @@
 
 This project is intended as a simple template for creating a Neo4j unmanaged extension.
 
+I downloaded Neo4j to this directory so the following instructions make that assumption about its location.
+If you've got Neo4j running elsewhere then change the instructions appropriately.
 
-````
-curl -H "Accept-Encoding:gzip,deflate" -v http://localhost:7474/unmanaged/dummy/all-nodes | gunzip
-````
+First let's package the unmanaged extension:
+
+```
+mvn package
+```
+
+Now let's copy it into the Neo4j plugins folder:
+
+```
+cp target/dummy-unmanaged-extension-0.0.1-SNAPSHOT.jar neo4j-community-2.2.3/plugins/
+```
+
+Next we add the following line to conf/neo4j-server.properties
+
+```
+org.neo4j.server.thirdparty_jaxrs_classes=org.neo4j.unmanaged=/unmanaged
+```
+
+
+
+```
+$ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes
+�V���K�MU��V�M,�V�Q��L��IU����-�
+```
+
+If we want to see that in clear text we can pipe the output through gunzip:
+
+```
+$ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes | gunzip
+{"n.name":["Mark","Nicole"]}
+```
+
+Much better.
