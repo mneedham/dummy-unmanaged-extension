@@ -18,38 +18,37 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-@Path("/dummy")
-public class DummyResource {
+@Path("/example")
+public class ExampleResource {
     private final GraphDatabaseService db;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public DummyResource(@Context GraphDatabaseService db) {
+    public ExampleResource(@Context GraphDatabaseService db) {
         this.db = db;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/all-nodes")
+    @Path("/people")
     public Response allNodes() throws IOException {
-        StreamingOutput stream = new StreamingOutput() {
-            @Override
-            public void write(OutputStream os) throws IOException, WebApplicationException {
-                JsonGenerator jg = OBJECT_MAPPER.getJsonFactory().createJsonGenerator(os, JsonEncoding.UTF8);
-                jg.writeStartObject();
-                jg.writeFieldName("people");
-                jg.writeStartArray();
-
-                writeQueryResultTo("MATCH (n:Person) RETURN n.name AS name", jg);
-
-                jg.writeEndArray();
-                jg.writeEndObject();
-                jg.flush();
-                jg.close();
-            }
-        };
-
+        StreamingOutput stream = streamQueryResponse("MATCH (n:Person) RETURN n.name AS name");
         return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).build();
+    }
 
+    private StreamingOutput streamQueryResponse(final String query) {
+        return new StreamingOutput() {
+                @Override
+                public void write(OutputStream os) throws IOException, WebApplicationException {
+                    JsonGenerator jg = OBJECT_MAPPER.getJsonFactory().createJsonGenerator(os, JsonEncoding.UTF8);
+                    jg.writeStartArray();
+
+                    writeQueryResultTo(query, jg);
+
+                    jg.writeEndArray();
+                    jg.flush();
+                    jg.close();
+                }
+            };
     }
 
     private void writeQueryResultTo(String query, JsonGenerator jg) throws IOException {

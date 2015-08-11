@@ -62,13 +62,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-shell</artifactId>
-            <version>${neo4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
@@ -88,18 +81,12 @@
         </dependency>
 
         <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-cypher</artifactId>
-            <version>${neo4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
+        <groupId>org.neo4j.app</groupId>
+        <artifactId>neo4j-server</artifactId>
+        <version>${neo4j.version}</version>
+        <scope>test</scope>
+        <type>test-jar</type>
 
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-kernel</artifactId>
-            <version>${neo4j.version}</version>
-            <scope>test</scope>
-            <type>test-jar</type>
         </dependency>
 
         <dependency>
@@ -166,6 +153,7 @@
             <artifactId>jersey-client</artifactId>
             <version>${jersey.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

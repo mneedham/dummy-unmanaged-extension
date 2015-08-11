@@ -9,7 +9,7 @@ If you've got Neo4j running elsewhere then change the instructions appropriately
 First let's build a JAR containing our unmanaged extension:
 
 ```
-mvn assembly:single
+mvn package
 ```
 
 Now let's copy it into the Neo4j plugins folder:
@@ -37,21 +37,21 @@ create (p:Person {name: "Mark"})
 Now we can make some calls to our unmanaged extension:
 
 ```
-$ curl http://localhost:7474/unmanaged/dummy/all-nodes
+curl http://localhost:7474/unmanaged/example/people
 {"people":[{"name":"Mark"},{"name":"Nicole"}]}
 ```
 
 The extension can also return us a gzipped response if we ask for it:
 
 ```
-$ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes
+$ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/example/people
 �V*H�/�IU���V�K�2�|���ju�|���|����Zw �Z.
 ```
 
 I'm not so good at reading gzipped but if we want to see that in clear text we can pipe the output through gunzip:
 
 ```
-$ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/dummy/all-nodes | gunzip
+$ curl -H "Accept-Encoding:gzip,deflate" http://localhost:7474/unmanaged/example/people | gunzip
 {"people":[{"name":"Mark"},{"name":"Nicole"}]}
 ```
 

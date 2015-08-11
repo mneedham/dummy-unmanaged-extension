@@ -2,7 +2,6 @@ package org.neo4j.unmanaged;
 
 import org.apache.commons.configuration.Configuration;
 import org.eclipse.jetty.servlets.GzipFilter;
-import org.eclipse.jetty.servlets.gzip.GzipHandler;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.server.AbstractNeoServer;
 import org.neo4j.server.NeoServer;

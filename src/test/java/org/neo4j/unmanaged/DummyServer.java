@@ -13,7 +13,7 @@ public class DummyServer {
 
         ServerControls server = TestServerBuilders
                 .newInProcessBuilder(new File("/Users/markneedham/repos/dummy-unmanaged-extension/neo4j-community-2.2.3/data/graph.db"))
-                .withExtension("/unmanaged", DummyResource.class)
+                .withExtension("/unmanaged", ExampleResource.class)
                 .newServer();
 
 
