@@ -7,10 +7,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.6.1</slf4j.version>
-        <neo4j.version>2.2.3</neo4j.version>
+        <!--<slf4j.version>1.6.1</slf4j.version>-->
+        <neo4j.version>3.0.2</neo4j.version>
         <jersey.version>1.19</jersey.version>
-        <jetty.version>9.2.4.v20141103</jetty.version>
+        <jetty.version>9.2.9.v20150224</jetty.version>
         <license-text.header>GPL-3-header.txt</license-text.header>
     </properties>
 
