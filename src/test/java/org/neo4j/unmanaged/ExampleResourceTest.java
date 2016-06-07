@@ -12,7 +12,8 @@ import org.neo4j.helpers.collection.Iterables;
 import org.neo4j.test.server.HTTP;
 
 import javax.ws.rs.core.MediaType;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -85,7 +86,7 @@ public class ExampleResourceTest {
         // then
         assertEquals(200, response.getStatus());
         assertEquals("gzip", Iterables.single(response.getHeaders().get("Content-Encoding")));
-        assertEquals("[{\"name\":\"Mark\"},{\"name\":\"Nicole\"}]", uncompressed);
+        assertEquals("{\"results\":[{\"columns\":[\"n.name\"],\"data\":[{\"row\":[\"Mark\"],\"meta\":[null]},{\"row\":[\"Nicole\"],\"meta\":[null]}]}],\"errors\":[]}", uncompressed);
     }
 
     private String gunzip(byte[] compressed) throws IOException {
